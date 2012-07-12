@@ -1,0 +1,10 @@
+{
+	"name": "bugswarm-monitor-server",
+	"version": "0.1.0",
+	"author": "Andrew Tergis <andrew.tergis@buglabs.net>",
+	"description": "A custom real-time monitoring server for node.js",
+	"dependencies": {
+		"express": "2.5.9",
+		"socket.io": "0.9.6"
+	}
+}
