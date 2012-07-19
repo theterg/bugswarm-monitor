@@ -1,0 +1,9 @@
+{
+	"name": "bugswarm-monitor",
+	"version": "0.1.0",
+	"author": "Andrew Tergis <andrew.tergis@buglabs.net>",
+	"description": "A custom real-time monitoring application for node.js",
+	"dependencies": {
+		"request": "2.9.202"
+	}
+}

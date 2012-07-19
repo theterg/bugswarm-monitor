@@ -39,10 +39,25 @@ window.ItemView = Backbone.View.extend({
 		}
 		var memratio = (mem.free/mem.total)*100.0;
 		row += '<td class='+((memratio > 0.5)?'good':'bad')+'>'+memratio.toFixed(3)+'</td>'
-		row += '<td class='+((swarm.latency < 700)?'good':'bad')+'>'+swarm.latency+'</td>';
-		row += '<td class=good>'+swarm.total+'</td>';
-		row += '<td class='+((swarm.mps < 100.0)?'good':'bad')+'>'+swarm.mps.toFixed(3)+'</td>';
+		if (!isNaN(swarm.latency))
+			row += '<td class='+((swarm.latency < 700)?'good':'bad')+'>'+swarm.latency+'</td>';
+		else
+			row += '<td>'+swarm.latency+'</td>';
+		if (!isNaN(swarm.total))
+			row += '<td class=good>'+swarm.total+'</td>';
+		else
+			row += '<td>'+swarm.total+'</td>';
+		if (!isNaN(swarm.mps))
+			row += '<td class='+((swarm.mps < 100.0)?'good':'bad')+'>'+swarm.mps.toFixed(3)+'</td>';
+		else
+			row += '<td>'+swarm.mps+'</td>';
 		$(this.el).html(row);
+		if (!this.model.get('online')){
+			$(this.el).children().each(function() {
+				$(this).removeClass('good');
+				$(this).addClass('bad');
+			});
+		}
 		return this;
 	}
 });
