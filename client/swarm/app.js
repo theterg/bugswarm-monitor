@@ -12,9 +12,12 @@ swarmLoopback.connect();
 function statLoop() {
 	var data = {
 		host: os.hostname(),
+		time: Date.now(),
 		rate: config.pollInterval,
 		swarm: {
-			latency: swarmLoopback.latency
+			latency: swarmLoopback.latency,
+			total: swarmLoopback.totalMongo,
+			mps: swarmLoopback.mps
 		},
 		load: os.loadavg(),
 		mem: {

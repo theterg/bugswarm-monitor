@@ -1,10 +1,16 @@
 var config = require('./config');
 var SwarmConnection = require('bugswarm-prt').Swarm;
+var db = require("mongojs").connect(config.mongoOptions.databaseURL);
+var coll = db.collection(config.mongoOptions.collection);
 
 var lastToken = config.loopbackToken+'0';
 var sentTime = 0;
 var receivedTime = 0;
 var loopbackIdx = 0;
+var lastMongo = {
+	time: 0,
+	count: 0
+}
 exports.latency = 0;
 exports.connected = false;
 
@@ -35,7 +41,17 @@ function poll() {
 			//TODO - attempt to reconnect to swarm after some number of failures...
 		}
     }, config.swarmTimeout);
-
+	coll.find().count(function(err, count) {
+		if (!err) {
+			exports.totalMongo = count;
+			exports.mps = (count-lastMongo.count)/((Date.now()-lastMongo.time)/1000);
+			console.log('Total: '+count+' mps: '+exports.mps+' diff: '+(count - lastMongo.count));
+			lastMongo.time = Date.now();
+			lastMongo.count = count;
+		} else {
+			console.log('[Mongo] error: '+err);
+		}
+	});
 }
 
 swarm.on('error', function(error) {
@@ -52,3 +68,4 @@ exports.connect = function() {
 	console.log('[Swarm] Connecting');
 	swarm.connect();
 }
+
