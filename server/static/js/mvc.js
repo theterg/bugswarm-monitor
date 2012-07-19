@@ -40,7 +40,7 @@ window.ItemView = Backbone.View.extend({
 		var memratio = (mem.free/mem.total)*100.0;
 		row += '<td class='+((memratio > 0.5)?'good':'bad')+'>'+memratio.toFixed(3)+'</td>'
 		if (!isNaN(swarm.latency))
-			row += '<td class='+((swarm.latency < 700)?'good':'bad')+'>'+swarm.latency+'</td>';
+			row += '<td class='+((swarm.latency < 1000)?'good':'bad')+'>'+swarm.latency+'</td>';
 		else
 			row += '<td>'+swarm.latency+'</td>';
 		if (!isNaN(swarm.total))

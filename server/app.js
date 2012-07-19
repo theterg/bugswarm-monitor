@@ -1,3 +1,5 @@
+var config = require('./config');
+var exec = require('child_process').exec;
 var webservice = require('./webservice');
 var service = new Webservice(8080);
 var io = require('socket.io').listen(8081);
@@ -14,6 +16,12 @@ service.on('serverdata', function(data) {
 		service.history[host].online = false;
 		console.log('Host '+host+' has fallen offline!');
 		io.sockets.emit('update', service.history[host]);
+		for (var app in config.notificationApp) {
+			console.log('Informing via: '+app);
+			exec(config.notificationApp[app]+' "bugswarm-monitor: '+host+' has fallen offline"', function(error, stdout, stderr){
+				console.log('informed: err: '+error+' stdout: '+stdout+' stderr: '+stderr);
+			});
+		}
 	}, service.history[host].rate*3);
 	io.sockets.emit('update', service.history[host]);
 });
